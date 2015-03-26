@@ -1,0 +1,8 @@
+web:
+  build: .
+  volumes:
+    - ".:/home/app"
+  ports:
+    - "80:3001"
+  environment:
+    NODE_ENV: production

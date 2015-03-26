@@ -1,0 +1,5 @@
+web:
+  image: dciccale/angular-docker-boilerplate
+  autorestart: always
+  ports:
+    - "80:3001"

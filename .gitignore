@@ -1,0 +1,15 @@
+.DS_Store
+*.db
+node_modules/
+bower_components/
+coverage/
+sass-cache/
+reports/
+npm-debug.log
+.sass-cache/
+src/css/*.css
+*.css.map
+dist/
+test/results.xml
+eslint-report.tap
+.tmp
