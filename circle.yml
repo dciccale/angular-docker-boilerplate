@@ -5,11 +5,14 @@ machine:
 dependencies:
   override:
     - sudo pip install docker-compose
+    - npm install -g gulp bower
+    - npm install
+    - bower install
 
 test:
   override:
     - docker-compose run -d --no-deps web
-    - gulp test
+    - npm test
 
 deployment:
   hub:
