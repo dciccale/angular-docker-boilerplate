@@ -1,10 +1,9 @@
 {
   "name": "angular-docker-boilerplate",
+  "version": "0.0.1",
   "description": "",
   "readme": "README.md",
   "repository": "git@github.com:dciccale/angular-docker-boilerplate.git",
-  "version": "0.0.1",
-  "private": true,
   "dependencies": {
     "compression": "^1.4.3"
   },
@@ -49,5 +48,6 @@
     "start": "gulp serve",
     "test": "gulp test",
     "build": "gulp dist"
-  }
+  },
+  "private": true
 }
