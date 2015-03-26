@@ -13,6 +13,7 @@
     "csslint": "^0.10.0",
     "eslint": "^0.17.1",
     "eslint-tap": "^1.0.0",
+    "event-stream": "^3.3.0",
     "gulp": "^3.8.11",
     "gulp-angular-filesort": "^1.1.1",
     "gulp-autoprefixer": "^2.1.0",
