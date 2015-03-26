@@ -1,15 +1,8 @@
 angular.module('angular-docker-boilerplate')
-  .service('AuthService', ['$rootScope', '$cookieStore',
-    function ($rootScope, $cookieStore) {
+  .service('AuthService', [function () {
     'use strict';
 
-    var currentUser = {};
-
-    if ($cookieStore.get('token')) {
-      // currentUser = UserService.get();
-    }
-
-    this.login = function (user) { };
+    this.login = function () { };
 
     this.logout = function () { };
 

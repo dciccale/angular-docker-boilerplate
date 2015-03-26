@@ -230,7 +230,7 @@ gulp.task('serve-dist', g.serve({
 /**
  * Default task
  */
-gulp.task('default', [/*'lint', */'build-all']);
+gulp.task('default', ['lint', 'build-all']);
 
 /**
  * All CSS files as a stream

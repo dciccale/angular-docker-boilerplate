@@ -19,8 +19,7 @@
     "module": false,
     "xdescribe": fale,
     "xit": false,
-    "spyOn": false,
-    "PacklinkSDK": true
+    "spyOn": false
   },
 
   "rules": {
