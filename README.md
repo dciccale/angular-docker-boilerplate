@@ -48,3 +48,8 @@ With [CircleCI](https://circleci.com/), see [circle.yml](docker-compose.yml)
 ## Continuous Delivery
 
 With [Tutum](https://www.tutum.co/), see [tutum.yml](docker-compose.yml)
+
+## Coming soon
+
+- For now it only provides a production ready docker image, I want to provide a development enviroment also.
+- Also will integrate a nodejs API and link it through docker-compose and using git submodules.
