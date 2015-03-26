@@ -30,6 +30,10 @@ Generates a `dist` diretory with all the files ready to serve.
 
 ## Docker
 
+Install [Docker](https://docs.docker.com/installation/#installation) and [Compose](https://docs.docker.com/compose/install/#install-compose)
+
+Start docker and run:
+
 ```bash
 $ docker-compose up
 ```
