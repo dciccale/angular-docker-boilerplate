@@ -9,13 +9,7 @@ RUN \
 WORKDIR /home/app
 ADD . /home/app
 
-RUN \
-  gem install sass --no-ri --no-rdoc && \
-  npm install -g gulp bower && \
-  npm install && \
-  npm rebuild node-sass && \
-  bower install --config.interactive=false --allow-root && \
-  gulp dist
+RUN make install && make build
 
 EXPOSE 3001
 

@@ -3,7 +3,11 @@ SHELL  := /bin/bash
 
 install:
 	@echo + Installing
-	-@npm install
+	-@gem install sass --no-ri --no-rdoc
 	-@npm install -g bower gulp
-	-@bower install --allow-root
-	-@gem install sass
+	-@npm install
+	-@bower install --config.interactive=false --allow-root
+
+build:
+	@echo + Building
+	-@gulp dist

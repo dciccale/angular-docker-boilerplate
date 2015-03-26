@@ -50,8 +50,7 @@
   },
   "scripts": {
     "start": "gulp serve",
-    "test": "gulp test",
-    "build": "gulp dist"
+    "test": "gulp test"
   },
   "private": true
 }
