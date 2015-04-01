@@ -47,13 +47,13 @@ Image at DockerHub [dciccale/angular-docker-boilerplate](https://registry.hub.do
 
 ## Continuous Integration
 
-With [CircleCI](https://circleci.com/), see [circle.yml](docker-compose.yml)
+With [CircleCI](https://circleci.com/), see [circle.yml](circle.yml)
 
 Build url: https://circleci.com/gh/dciccale/angular-docker-boilerplate
 
 ## Continuous Delivery
 
-With [Tutum](https://www.tutum.co/), see [tutum.yml](docker-compose.yml)
+With [Tutum](https://www.tutum.co/), see [tutum.yml](tutum.yml)
 
 See deployed node at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io)
 
