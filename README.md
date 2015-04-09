@@ -60,4 +60,4 @@ See deployed node at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](h
 ## Coming soon
 
 - For now it only provides a production ready docker image, I want to provide a development enviroment also.
-- Also will integrate a nodejs API and link it through docker-compose and using git submodules.
+- <strike>Also will integrate a nodejs API and link it through docker-compose and using git submodules.</strike> (in progress https://github.com/dciccale/node-api-mongo-docker)
