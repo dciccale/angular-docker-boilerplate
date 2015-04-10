@@ -220,8 +220,13 @@ gulp.task('templates-dist', function () {
   return templateFiles({min: true}).pipe(buildTemplates());
 });
 
+// Clean tmp
+gulp.task('clean-dist', function (done) {
+  rimraf('./dist', done);
+});
+
 // Build dist
-gulp.task('dist', ['imagemin', 'rev'], function () {
+gulp.task('dist', ['clean-dist', 'imagemin', 'rev'], function () {
   return gulp.src('./dist/index.html')
     .pipe(g.htmlmin(htmlminOpts))
     .pipe(gulp.dest('./dist'));
@@ -266,7 +271,7 @@ function injectSass() {
 
 // All CSS files as a stream
 function cssFiles(opt) {
-  return gulp.src('./.tmp/css/**/*.css', opt);
+  return gulp.src('./.tmp/app/app.css', opt);
 }
 
 // All AngularJS application files as a stream
