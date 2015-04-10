@@ -28,15 +28,26 @@ var karmaConfPath = path.join(__dirname, '/karma.conf.js');
 // Dev tasks
 // ----------
 
-// Run tests
-gulp.task('test', function (done) {
+// Run all tests
+gulp.task('test', ['test-client', 'test-server'], function (done) {
+  done();
+});
+
+// Run client tests
+gulp.task('test-client', function (done) {
   karma.start({
     configFile: karmaConfPath,
     singleRun: true
   }, done);
 });
 
-// Watch for file changes and re-run tests on each change
+// Run server tests
+gulp.task('test-server', function () {
+  return gulp.src(['./test/server/**/*.js'])
+    .pipe(g.spawnMocha());
+});
+
+// Watch for file changes and re-run client tests on each change
 gulp.task('test-watch', function (done) {
   karma.start({
     configFile: karmaConfPath
@@ -45,22 +56,21 @@ gulp.task('test-watch', function (done) {
 
 // ESLint
 gulp.task('eslint', function () {
-  return lint()
-    .pipe(g.eslint.format())
-    .pipe(livereload());
+  return lint().pipe(g.eslint.format()).pipe(livereload());
 });
 
-// Clean CSS tmp
-gulp.task('clean-css', function (done) {
-  rimraf('./.tmp/css', done);
+// Clean tmp
+gulp.task('clean', function (done) {
+  rimraf('./.tmp/*', done);
 });
 
-// Compile sass and run auto prefixer
-gulp.task('styles', ['clean-css'], function () {
-  return gulp.src(['./src/sass/*.scss', '!./src/sass/_*.scss'])
+// Compile styles
+gulp.task('styles', function () {
+  return gulp.src(['./client/app/app.scss'])
+    .pipe(injectSass())
     .pipe(g.sass().on('error', handleError))
     .pipe(g.autoprefixer())
-    .pipe(gulp.dest('./.tmp/css/'))
+    .pipe(gulp.dest('./.tmp/app'))
     .pipe(g.cached('built-css'))
     .pipe(livereload());
 });
@@ -88,10 +98,10 @@ gulp.task('vendors', function () {
   var vendorCss = fileTypeFilter(files, 'css');
   var q = new Queue({objectMode: true});
   if (vendorJs.length) {
-    q.queue(gulp.src(vendorJs).pipe(dist('js', 'vendors')));
+    q.queue(gulp.src(vendorJs).pipe(dist('js', 'vendor')));
   }
   if (vendorCss.length) {
-    q.queue(gulp.src(vendorCss).pipe(dist('css', 'vendors')));
+    q.queue(gulp.src(vendorCss).pipe(dist('css', 'vendor')));
   }
   return q.done();
 });
@@ -99,80 +109,110 @@ gulp.task('vendors', function () {
 // Index
 gulp.task('index', index);
 
-gulp.task('build-all', ['styles', 'templates'], index);
+// Build
+gulp.task('build', ['styles', 'templates'], index);
 
-// Static file server
-gulp.task('statics', g.serve({
-  port: 3000,
-  root: ['./.tmp', './.tmp/src/app', './src/app', './bower_components'],
-  middleware: historyApiFallback
-}));
-
-// Watch
-gulp.task('serve', ['watch']);
-gulp.task('watch', ['build-all', 'statics'], function () {
+// Serve
+gulp.task('serve', ['clean', 'build'], function () {
   isWatching = true;
+
+  var server = g.liveServer(['./server/app.js'], {}, false);
+  server.start();
+
+  //restart my server
+  gulp.watch('./server/app.js', server.start);
+
   // Initiate livereload server:
   g.livereload.listen();
-  gulp.watch(['./src/app/**/*.js', './test/unit/**/*.js'], ['eslint']).on('change', function (evt) {
-    if (evt.type !== 'changed') {
-      gulp.start('index');
+
+  var skipIndex = false;
+
+  // Watch index change
+  gulp.watch(['./client/index.html', './bower.json'], function () {
+    gulp.start(skipIndex ? [] : ['index']);
+  });
+
+  // Watch scripts
+  g.watch(['./client/{app,components}/**/*.js', './test/unit/**/*.js'], function (vinyl) {
+    if (vinyl.event !== 'change') {
+      skipIndex = true;
+      gulp.start('index', function () {
+        // server.notify(vinyl);
+        g.livereload.changed(vinyl);
+        skipIndex = false;
+      });
     } else {
-      g.livereload.changed(evt);
+      g.livereload.changed(vinyl);
+      skipIndex = false;
+      // server.notify(vinyl);
     }
   });
+
+  // Lint gulpfile
   gulp.watch('gulpfile.js', function () {
     return lint().pipe(g.eslint.format());
   });
-  gulp.watch('./src/app/index.html', ['index']);
-  gulp.watch(['./src/app/**/*.html', '!./src/app/index.html'], ['templates']);
-  gulp.watch(['./src/sass/**/*.scss'], ['csslint'])
+
+  // Watch client tests
+  gulp.watch(['test/client/{app,components}/**/*.js'], ['test-client']);
+
+  // Watch server tests
+  gulp.watch(['test/server/**/*.js'], ['test-server']);
+
+  // Watch templates
+  g.watch(['./client/{app,components}/**/*.html', '!./client/index.html'], function () {
+    gulp.start('templates');
+  });
+
+  // Watch sass
+  gulp.watch(['./client/{app,components}/**/*.scss'], ['csslint'])
     .on('change', function (evt) {
       g.util.log(
         g.util.colors.magenta('gulp-watch'),
-        g.util.colors.cyan(evt.path.replace(/.*(?=sass)/, '')),
+        g.util.colors.cyan(evt.path.match(/client.*/)[0]),
         'was', evt.type + ', compiling...'
       );
     });
 });
 
-/**
- * Dist tasks
- */
+// Dist tasks
+// ----------
 
 // Compress images
 gulp.task('imagemin', function () {
-  return gulp.src('./src/app/assets/**/*.{png,jpg,gif,svg}')
+  return gulp.src('./client/assets/images/{,*//*}*.{png,jpg,gif,svg}')
     .pipe(g.imagemin())
     .pipe(gulp.dest('./dist/assets'));
 });
 
 // Inject styles and scripts
 gulp.task('inject-dist', ['vendors', 'styles-dist', 'scripts-dist'], function () {
-  return gulp.src('./src/app/index.html')
-    .pipe(g.inject(gulp.src('./.tmp/vendors.min.{js,css}'), {
+  return gulp.src('./client/index.html')
+    .pipe(g.inject(gulp.src('./.tmp/vendor.min.{js,css}'), {
       ignorePath: '.tmp',
       starttag: '<!-- inject:vendor:{{ext}} -->'
     }))
-    .pipe(g.inject(gulp.src('./.tmp/' + bower.name + '.min.{js,css}'), {ignorePath: '.tmp'}))
-    .pipe(gulp.dest('./dist/'));
+    .pipe(g.inject(gulp.src('./.tmp/app.min.{js,css}'), {
+      ignorePath: '.tmp'
+    }))
+    .pipe(gulp.dest('./dist'));
 });
 
 // Version styles and scripts
 gulp.task('rev', ['inject-dist'], function () {
   return gulp.src(['./.tmp/**/*.json', './dist/index.html'])
     .pipe(g.revCollector({replaceReved: true}))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('./dist'));
 });
 
 // Run dist tasks for styles
 gulp.task('styles-dist', ['styles'], function () {
-  return cssFiles().pipe(dist('css', bower.name));
+  return cssFiles().pipe(dist('css', 'app'));
 });
 
 // Run dist tasks for scripts
 gulp.task('scripts-dist', ['templates-dist'], function () {
-  return appFiles().pipe(dist('js', bower.name, {ngAnnotate: false}));
+  return appFiles().pipe(dist('js', 'app', {ngAnnotate: false}));
 });
 
 // Compile and minify templates
@@ -180,15 +220,19 @@ gulp.task('templates-dist', function () {
   return templateFiles({min: true}).pipe(buildTemplates());
 });
 
-// Build dist index
-gulp.task('dist', ['imagemin', 'rev'], function () {
+// Clean tmp
+gulp.task('clean-dist', function (done) {
+  rimraf('./dist', done);
+});
+
+// Build dist
+gulp.task('dist', ['clean-dist', 'imagemin', 'rev'], function () {
   return gulp.src('./dist/index.html')
     .pipe(g.htmlmin(htmlminOpts))
-    .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./dist'));
 });
 
 // Serve dist directory with gzip/deflateRun dist
-// TODO: change to nodemon for having a separate server file
 gulp.task('serve-dist', g.serve({
   port: 3001,
   root: ['./dist'],
@@ -201,49 +245,52 @@ gulp.task('default', ['lint', 'build-all']);
 // Build index
 function index() {
   var opt = {read: false};
-  return gulp.src('./src/app/index.html')
+  return gulp.src('./client/index.html')
     .pipe(g.inject(gulp.src(mainBowerFiles(), opt), {
-      ignorePath: 'bower_components',
-      starttag: '<!-- inject:vendor:{{ext}} -->'
+      starttag: '<!-- inject:vendor:{{ext}} -->',
+      relative: true
     }))
-    .pipe(g.inject(es.merge(appFiles(), cssFiles(opt)), {ignorePath: ['.tmp', 'src/app']}))
-    // .pipe(gulp.dest('./src/app/'))
-    .pipe(g.embedlr())
-    .pipe(gulp.dest('./.tmp/'))
+    .pipe(g.inject(es.merge(appFiles(opt), cssFiles(opt)), {
+      ignorePath: ['../.tmp'],
+      relative: true
+    }))
+    .pipe(gulp.dest('./client'))
     .pipe(livereload());
+}
+
+function injectSass() {
+  return g.inject(gulp.src(['./client/{app,components}/**/*.scss', '!./client/app/app.scss'], {read: false}), {
+    transform: function (filePath) { return '@import \'' + filePath + '\';'; },
+    ignorePath: '/client/app',
+    relative: true,
+    starttag: '// injector',
+    endtag: '// endinjector'
+  })
+  .pipe(gulp.dest('./client/app'));
 }
 
 // All CSS files as a stream
 function cssFiles(opt) {
-  return gulp.src('./.tmp/css/**/*.css', opt);
+  return gulp.src('./.tmp/app/app.css', opt);
 }
 
 // All AngularJS application files as a stream
-function appFiles() {
-  var files = [
-    './.tmp/' + bower.name + '-templates.js',
-    './.tmp/src/app/**/*.js',
-    './src/app/**/*.js'
-  ];
-  return gulp.src(files)
-    .pipe(g.angularFilesort());
+function appFiles(opt) {
+  return gulp.src(['./client/{app,components}/**/*.js', './.tmp/templates.js'], opt);
+    // .pipe(g.angularFilesort());
 }
 
 // All AngularJS templates/partials as a stream
 function templateFiles(opt) {
-  return gulp.src(['./src/app/**/*.html', '!./src/app/index.html'], opt)
+  return gulp.src(['./client/{app,components}/**/*.html'], opt)
     .pipe(opt && opt.min ? g.htmlmin(htmlminOpts) : noop());
 }
 
 // Build AngularJS templates/partials
 function buildTemplates() {
   return lazypipe()
-    .pipe(g.ngHtml2js, {
-      moduleName: bower.name,
-      prefix: '/' + bower.name + '/',
-      stripPrefix: '/src/app'
-    })
-    .pipe(g.concat, bower.name + '-templates.js')
+    .pipe(g.ngHtml2js, {moduleName: bower.name})
+    .pipe(g.concat, 'templates.js')
     .pipe(gulp.dest, './.tmp')
     .pipe(livereload)();
 }
@@ -291,7 +338,7 @@ function livereload() {
 }
 
 function lint() {
-  return gulp.src(['./gulpfile.js', './src/app/**/*.js', './test/unit/**/*.js'])
+  return gulp.src(['./gulpfile.js', './client/{app,components}/**/*.js', './test/unit/**/*.js'])
     .pipe(g.cached('eslint'))
     .pipe(g.eslint());
 }

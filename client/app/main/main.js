@@ -4,7 +4,7 @@ angular.module('angular-docker-boilerplate')
 
     $stateProvider.state('home', {
       url: '/',
-      templateUrl: '/angular-docker-boilerplate/main/main.html',
+      templateUrl: 'app/main/main.html',
       controller: 'MainCtrl'
     });
   }]);

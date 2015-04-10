@@ -10,7 +10,7 @@ describe('app', function () {
     $location = _$location_;
 
     $httpBackend = _$httpBackend_;
-    $httpBackend.when('GET', '/angular-docker-boilerplate/main/main.html').respond({});
+    $httpBackend.when('GET', 'app/main/main.html').respond({});
   }));
 
   afterEach(function () {
