@@ -44,7 +44,10 @@ gulp.task('test-client', function (done) {
 // Run server tests
 gulp.task('test-server', function () {
   return gulp.src(['./test/server/**/*.js'])
-    .pipe(g.spawnMocha());
+    .pipe(g.spawnMocha({
+      env: {NODE_ENV: 'test'},
+      istanbul: true
+    }));
 });
 
 // Watch for file changes and re-run client tests on each change
@@ -289,7 +292,6 @@ function cssFiles(opt) {
 // All AngularJS application files as a stream
 function appFiles(opt) {
   return gulp.src(['./client/{app,components}/**/*.js', './.tmp/templates.js'], opt);
-    // .pipe(g.angularFilesort());
 }
 
 // All AngularJS templates/partials as a stream
