@@ -10,23 +10,24 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      './bower_components/jquery/dist/jquery.js',
-      './bower_components/angular/angular.js',
-      './bower_components/angular-mocks/angular-mocks.js',
-      './bower_components/angular-cookies/angular-cookies.js',
-      './bower_components/angular-route/angular-route.js',
-      './bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/bower_components/jquery/dist/jquery.js',
+      'client/bower_components/angular/angular.js',
+      'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/bower_components/angular-cookies/angular-cookies.js',
+      'client/bower_components/angular-route/angular-route.js',
+      'client/bower_components/angular-ui-router/release/angular-ui-router.js',
 
-      './bower_components/numeral/numeral.js',
-      './bower_components/angular-animate/angular-animate.js',
-      './bower_components/angular-bootstrap/ui-bootstrap.js',
-      './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'client/bower_components/numeral/numeral.js',
+      'client/bower_components/angular-animate/angular-animate.js',
+      'client/bower_components/angular-bootstrap/ui-bootstrap.js',
+      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
 
-      'src/app/app.js',
-      'src/app/**/*.js',
-      'test/unit/**/*.js',
-      'src/app/**/*.html',
-      'src/app/components/**/*.html',
+      'client/app/app.js',
+      'client/app/**/*.js',
+      'client/components/**/*.js',
+      'client/app/**/*.html',
+      'client/components/**/*.html',
+      'test/client/**/*.js'
     ],
 
     // list of files to exclude
@@ -35,9 +36,12 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/app/**/*.js': ['coverage'],
-      'src/app/**/*.html': ['ng-html2js'],
-      'src/app/components/**/*.html': ['ng-html2js']
+      '**/*.js': ['coverage'],
+      '**/*.html': ['ng-html2js']
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'client/'
     },
 
     // test results reporter to use
