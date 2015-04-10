@@ -195,14 +195,14 @@ gulp.task('inject-dist', ['vendors', 'styles-dist', 'scripts-dist'], function ()
     .pipe(g.inject(gulp.src('./.tmp/app.min.{js,css}'), {
       ignorePath: '.tmp'
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/public'));
 });
 
-// Version styles and scripts
+// Replace index styles script tags with revved files
 gulp.task('rev', ['inject-dist'], function () {
-  return gulp.src(['./.tmp/**/*.json', './dist/index.html'])
+  return gulp.src(['./.tmp/**/*.json', './dist/public/index.html'])
     .pipe(g.revCollector({replaceReved: true}))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/public'));
 });
 
 // Run dist tasks for styles
@@ -222,22 +222,33 @@ gulp.task('templates-dist', function () {
 
 // Clean tmp
 gulp.task('clean-dist', function (done) {
-  rimraf('./dist', done);
+  rimraf('./dist/*', done);
+});
+
+// Copy server to dist
+gulp.task('copy-server', function () {
+  return gulp.src('./server/**/*')
+    .pipe(gulp.dest('./dist/server'))
+});
+
+// Copy favicon.ico to dist
+gulp.task('copy-favicon', function () {
+  return gulp.src('./client/favicon.ico')
+    .pipe(gulp.dest('./dist/public'))
 });
 
 // Build dist
-gulp.task('dist', ['clean-dist', 'imagemin', 'rev'], function () {
+gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-favicon'], function () {
   return gulp.src('./dist/index.html')
     .pipe(g.htmlmin(htmlminOpts))
     .pipe(gulp.dest('./dist'));
 });
 
 // Serve dist directory with gzip/deflateRun dist
-gulp.task('serve-dist', g.serve({
-  port: 3001,
-  root: ['./dist'],
-  middlewares: [compression(), historyApiFallback]
-}));
+gulp.task('serve-dist', function () {
+  process.env.NODE_ENV = 'production';
+  g.liveServer(['./dist/server/app.js'], {}, false).start();
+})
 
 // Default task
 gulp.task('default', ['lint', 'build-all']);
@@ -258,6 +269,7 @@ function index() {
     .pipe(livereload());
 }
 
+// Inject sass files into main sass file
 function injectSass() {
   return g.inject(gulp.src(['./client/{app,components}/**/*.scss', '!./client/app/app.scss'], {read: false}), {
     transform: function (filePath) { return '@import \'' + filePath + '\';'; },
@@ -326,7 +338,7 @@ function dist(ext, name, opt) {
     .pipe(g.rename, name + '.min.' + ext)
     .pipe(gulp.dest, './.tmp')
     .pipe(g.rev)
-    .pipe(gulp.dest, './dist')
+    .pipe(gulp.dest, './dist/public')
     .pipe(g.rev.manifest)
     .pipe(gulp.dest, './.tmp/rev-' + name + '-' + ext)();
 }
