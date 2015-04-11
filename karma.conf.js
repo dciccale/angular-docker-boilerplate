@@ -36,7 +36,7 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.js': ['coverage'],
+      'client/{app,components}/**/*.js': ['coverage'],
       '**/*.html': ['ng-html2js']
     },
 
@@ -51,8 +51,8 @@ module.exports = function (config) {
 
     coverageReporter: {
       reporters: [
-        {type: 'html', dir: 'coverage/'},
-        {type: 'cobertura', dir: 'coverage/', file: 'test-coverage.xml'}
+        {type: 'html', dir: 'coverage/client'},
+        {type: 'cobertura', dir: 'coverage/client', file: 'test-coverage.xml'}
       ]
     },
 

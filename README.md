@@ -16,9 +16,25 @@ $ npm start
 
 ## Tests
 
+Run client and server tests
+
 ```bash
 $ npm test
 ```
+
+If you want to run the tests sepparately use:
+
+```bash
+$ gulp test-client
+$ gulp test-server
+```
+
+## Coverage
+
+Code coverage report is generated:
+
+for client code in `coverage/client/`
+for server code in `coverage/server/`
 
 ## Production
 
@@ -27,6 +43,10 @@ $ make build
 ```
 
 Generates a `dist` diretory with all the files ready to serve.
+
+```bash
+$ node dist/sever/app.js
+```
 
 ## Docker
 
@@ -40,7 +60,7 @@ $ docker-compose up
 
 See [docker-compose.yml](docker-compose.yml) and [Dockerfile](Dockerfile)
 
-Will install al dependencies, build the app for production and serve it through port 3001 mapped to
+Will install al dependencies, build the app for production and serve it through port 8080 mapped to
 port 80.
 
 Image at DockerHub [dciccale/angular-docker-boilerplate](https://registry.hub.docker.com/u/dciccale/angular-docker-boilerplate/)
@@ -55,7 +75,7 @@ Build url: https://circleci.com/gh/dciccale/angular-docker-boilerplate
 
 With [Tutum](https://www.tutum.co/), see [tutum.yml](tutum.yml)
 
-See deployed node at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io)
+See deployed node at http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io
 
 ## Coming soon
 

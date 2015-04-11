@@ -46,7 +46,9 @@ gulp.task('test-server', function () {
   return gulp.src(['./test/server/**/*.js'])
     .pipe(g.spawnMocha({
       env: {NODE_ENV: 'test'},
-      istanbul: true
+      istanbul: {
+        dir: './coverage/server'
+      }
     }));
 });
 
