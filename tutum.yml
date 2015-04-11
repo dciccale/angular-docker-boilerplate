@@ -3,3 +3,15 @@ web:
   autorestart: always
   ports:
     - "80:8080"
+api:
+  image: 'dciccale/node-api-mongo-docker'
+  autorestart: always
+  links:
+    - 'mongo:mongo'
+  ports:
+    - '8888:8888'
+mongo:
+  image: 'mongo:latest'
+  autorestart: always
+  ports:
+    - '27017:27017'
