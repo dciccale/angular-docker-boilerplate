@@ -17,4 +17,4 @@ RUN \
 
 EXPOSE 8080
 
-CMD ["node", "./dist/server/app.js"]
+CMD make run

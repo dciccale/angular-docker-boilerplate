@@ -5,6 +5,8 @@ See deployed demo at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](h
 ## Installation
 
 ```bash
+$ git clone --recursive git://github.com/dciccale/angular-docker-boilerplate.git
+$ git submodule foreach npm install
 $ [sudo] make install
 ```
 
@@ -60,7 +62,7 @@ $ docker-compose up
 
 See [docker-compose.yml](docker-compose.yml) and [Dockerfile](Dockerfile)
 
-Will install al dependencies, build the app for production and serve it through port 8080 mapped to
+Will install all dependencies, build the app for production and serve it through port 8080 mapped to
 port 80.
 
 Image at DockerHub [dciccale/angular-docker-boilerplate](https://registry.hub.docker.com/u/dciccale/angular-docker-boilerplate/)

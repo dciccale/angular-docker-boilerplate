@@ -11,3 +11,6 @@ install:
 build:
 	@echo + Building
 	-@gulp dist
+
+run:
+	NODE_ENV=production node ./dist/server/app
