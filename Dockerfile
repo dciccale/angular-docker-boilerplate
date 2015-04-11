@@ -12,8 +12,10 @@ ADD . /home/app
 RUN \
     make install && \
     npm rebuild node-sass && \
-    make build
+    make build && \
+    npm prune --production && \
+    rm -rf client/
 
-EXPOSE 3001
+EXPOSE 8080
 
-CMD ["gulp", "serve-dist"]
+CMD ["node", "./dist/server/app.js"]

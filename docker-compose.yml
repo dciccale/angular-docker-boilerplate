@@ -3,6 +3,6 @@ web:
   volumes:
     - ".:/home/app"
   ports:
-    - "80:3001"
+    - "80:8080"
   environment:
     NODE_ENV: production
