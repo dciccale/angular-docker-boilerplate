@@ -13,8 +13,7 @@ RUN \
     make install && \
     npm rebuild node-sass && \
     make build && \
-    npm prune --production && \
-    rm -rf client/
+    npm prune --production
 
 EXPOSE 8080
 

@@ -15,6 +15,7 @@ var app = express();
 var http = require('http');
 
 require('./config/express')(app);
+require('./api')(app, config);
 require('./routes')(app);
 
 // Start server

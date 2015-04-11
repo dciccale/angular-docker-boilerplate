@@ -11,8 +11,6 @@ var lazypipe = require('lazypipe');
 var bower = require('./bower');
 var isWatching = false;
 var path = require('path');
-var compression = require('compression');
-var historyApiFallback = require('connect-history-api-fallback');
 var karma = require('karma').server;
 
 var htmlminOpts = {
@@ -124,8 +122,13 @@ gulp.task('serve', ['clean', 'build'], function () {
   var server = g.liveServer(['./server/app.js'], {}, false);
   server.start();
 
-  //restart my server
-  gulp.watch('./server/app.js', server.start);
+  // Watch server
+  gulp.watch(['server/**/*.js'], function () {
+    server.start();
+  });
+
+  // Restart server
+  // gulp.watch('./server/app.js', server.start);
 
   // Initiate livereload server:
   g.livereload.listen();
@@ -233,13 +236,13 @@ gulp.task('clean-dist', function (done) {
 // Copy server to dist
 gulp.task('copy-server', function () {
   return gulp.src('./server/**/*')
-    .pipe(gulp.dest('./dist/server'))
+    .pipe(gulp.dest('./dist/server'));
 });
 
 // Copy favicon.ico to dist
 gulp.task('copy-favicon', function () {
   return gulp.src('./client/favicon.ico')
-    .pipe(gulp.dest('./dist/public'))
+    .pipe(gulp.dest('./dist/public'));
 });
 
 // Build dist
@@ -253,7 +256,7 @@ gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-favicon'], function (
 gulp.task('serve-dist', function () {
   process.env.NODE_ENV = 'production';
   g.liveServer(['./dist/server/app.js'], {}, false).start();
-})
+});
 
 // Default task
 gulp.task('default', ['lint', 'build-all']);

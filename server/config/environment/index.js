@@ -20,6 +20,10 @@ var all = {
 
   // Server port
   port: process.env.PORT || 9000,
+
+  api: {
+    uri: process.env.API_1_PORT_8888_TCP || 'http://localhost:8888'
+  }
 };
 
 // Export the config object based on the NODE_ENV
