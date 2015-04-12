@@ -1,10 +1,5 @@
-web:
-  image: dciccale/angular-docker-boilerplate
-  autorestart: always
-  ports:
-    - "80:8080"
 api:
-  image: 'dciccale/node-api-mongo-docker'
+  image: 'dciccale/node-api-mongo-docker:latest'
   autorestart: always
   links:
     - 'mongo:mongo'
@@ -15,3 +10,10 @@ mongo:
   autorestart: always
   ports:
     - '27017:27017'
+web:
+  image: 'dciccale/angular-docker-boilerplate:latest'
+  autorestart: always
+  links:
+    - 'api:api'
+  ports:
+    - '80:8080'
