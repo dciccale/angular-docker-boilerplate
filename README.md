@@ -36,6 +36,7 @@ $ gulp test-server
 Code coverage report is generated:
 
 for client code in `coverage/client/`
+
 for server code in `coverage/server/`
 
 ## Production
@@ -46,9 +47,16 @@ $ make build
 
 Generates a `dist` diretory with all the files ready to serve.
 
+Run in production mode.
+
 ```bash
-$ node dist/sever/app.js
+$ make run
 ```
+
+## API
+
+The api is on it's own repository https://github.com/dciccale/node-api-mongo-docker and is linked to
+this container.
 
 ## Docker
 
@@ -62,8 +70,7 @@ $ docker-compose up
 
 See [docker-compose.yml](docker-compose.yml) and [Dockerfile](Dockerfile)
 
-Will install all dependencies, build the app for production and serve it through port 8080 mapped to
-port 80.
+Will install all dependencies, build the app for production and start the server.
 
 Image at DockerHub [dciccale/angular-docker-boilerplate](https://registry.hub.docker.com/u/dciccale/angular-docker-boilerplate/)
 
@@ -79,7 +86,6 @@ With [Tutum](https://www.tutum.co/), see [tutum.yml](tutum.yml)
 
 See deployed node at http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io
 
-## Coming soon
+## Next
 
 - For now it only provides a production ready docker image, I want to provide a development enviroment also.
-- <strike>Also will integrate a nodejs API and link it through docker-compose and using git submodules.</strike> (in progress https://github.com/dciccale/node-api-mongo-docker)
