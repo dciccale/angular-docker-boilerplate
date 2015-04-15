@@ -15,6 +15,7 @@
     <link rel="shortcut icon" href="favicon.ico">
 
     <!-- inject:vendor:css -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
     <!-- endinject -->
 
     <!-- inject:css -->
@@ -23,9 +24,7 @@
   </head>
 
   <body>
-    <div class="container">
-      <ui-view></ui-view>
-    </div>
+    <ui-view></ui-view>
 
     <!-- inject:vendor:js -->
     <script src="bower_components/angular/angular.js"></script>
@@ -34,17 +33,26 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/numeral/numeral.js"></script>
     <script src="bower_components/numeral/languages.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
     <!-- endinject -->
 
     <!-- inject:js -->
     <script src="app/app.js"></script>
+    <script src="app/account/account.js"></script>
+    <script src="app/admin/admin-controller.js"></script>
+    <script src="app/admin/admin.js"></script>
     <script src="app/main/main-controller.js"></script>
     <script src="app/main/main.js"></script>
     <script src="components/auth/auth-service.js"></script>
+    <script src="components/auth/user-service.js"></script>
+    <script src="components/navbar/navbar-controller.js"></script>
+    <script src="app/account/login/login-controller.js"></script>
+    <script src="app/account/settings/settings-controller.js"></script>
+    <script src="app/account/signup/signup-controller.js"></script>
     <script src="templates.js"></script>
     <!-- endinject -->
 </body>

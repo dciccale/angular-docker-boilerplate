@@ -12,8 +12,7 @@ ADD . /home/app
 RUN \
     make install && \
     npm rebuild node-sass && \
-    make build && \
-    npm prune --production
+    make build
 
 EXPOSE 8080
 

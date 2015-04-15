@@ -1,8 +1,16 @@
+$icon-font-path: "/bower_components/bootstrap-sass/assets/fonts/bootstrap/";
+$fa-font-path: "/bower_components/font-awesome/fonts";
+
+@import 'bootstrap-sass/assets/stylesheets/bootstrap';
+@import 'font-awesome/scss/font-awesome';
+
 body {
   background-color: #b4d455;
   color: darkslategray;
 }
 
 // injector
+@import 'admin/admin.scss';
 @import 'main/main.scss';
+@import 'account/login/login.scss';
 // endinjector

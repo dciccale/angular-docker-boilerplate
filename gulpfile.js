@@ -12,6 +12,7 @@ var bower = require('./bower');
 var isWatching = false;
 var path = require('path');
 var karma = require('karma').server;
+var colors = g.util.colors;
 
 var htmlminOpts = {
   removeComments: true,
@@ -67,27 +68,29 @@ gulp.task('clean', function (done) {
   rimraf('./.tmp/*', done);
 });
 
-// Compile styles
+// Inject and compile SASS
 gulp.task('styles', function () {
   return gulp.src(['./client/app/app.scss'])
-    .pipe(injectSass())
-    .pipe(g.sass().on('error', handleError))
+    .pipe(g.inject(gulp.src(['./client/{app,components}/**/*.scss', '!./client/app/app.scss'], {read: false}), {
+      transform: function (filePath) { return '@import \'' + filePath + '\';'; },
+      ignorePath: '/client/app',
+      relative: true,
+      starttag: '// injector',
+      endtag: '// endinjector'
+    }))
+    .pipe(gulp.dest('./client/app'))
+    .pipe(g.sass({
+      includePaths: [
+        './client/bower_components',
+        './client/app',
+        './client/components'
+      ]
+    }).on('error', handleError))
     .pipe(g.autoprefixer())
     .pipe(gulp.dest('./.tmp/app'))
     .pipe(g.cached('built-css'))
     .pipe(livereload());
 });
-
-// CSSLint
-gulp.task('csslint', ['styles'], function () {
-  return cssFiles()
-    .pipe(g.cached('csslint'))
-    .pipe(g.csslint('./.csslintrc'))
-    .pipe(g.csslint.reporter());
-});
-
-// Lint everything
-gulp.task('lint', ['eslint', 'csslint']);
 
 // Templates
 gulp.task('templates', function () {
@@ -117,28 +120,37 @@ gulp.task('build', ['styles', 'templates'], index);
 
 // Serve
 gulp.task('serve', ['clean', 'build'], function () {
+  var server, skipIndex;
+
   isWatching = true;
 
-  var server = g.liveServer(['./server/app.js'], {}, false);
+  server = g.liveServer(['./server/app.js'], {}, false);
+
+  // Start server
   server.start();
 
-  // Watch server
-  gulp.watch(['server/**/*.js'], function () {
-    server.start();
-  });
-
-  // Restart server
-  // gulp.watch('./server/app.js', server.start);
-
-  // Initiate livereload server:
+  // Start livereload server
   g.livereload.listen();
 
-  var skipIndex = false;
+  // Watch server
+  gulp.watch(['server/**/*.js'], server.start)
+    .on('change', function (evt) {
+      g.util.log(
+        colors.magenta('gulp-watch'),
+        colors.cyan(evt.path.match(/server.*/)[0]),
+        'was', evt.type + ', restarting server...'
+      );
+    });
+
+  skipIndex = false;
 
   // Watch index change
   gulp.watch(['./client/index.html', './bower.json'], function () {
     gulp.start(skipIndex ? [] : ['index']);
   });
+
+  // Lint all js files
+  gulp.watch(['./client/{app,components}/**/*.js', './test/unit/**/*.js'], ['eslint']);
 
   // Watch scripts
   g.watch(['./client/{app,components}/**/*.js', './test/unit/**/*.js'], function (vinyl) {
@@ -173,14 +185,12 @@ gulp.task('serve', ['clean', 'build'], function () {
   });
 
   // Watch sass
-  gulp.watch(['./client/{app,components}/**/*.scss'], ['csslint'])
-    .on('change', function (evt) {
-      g.util.log(
-        g.util.colors.magenta('gulp-watch'),
-        g.util.colors.cyan(evt.path.match(/client.*/)[0]),
-        'was', evt.type + ', compiling...'
-      );
-    });
+  g.watch(['./client/{app,components}/**/*.scss'], function (vinyl) {
+    gulp.start('styles');
+    g.util.log(
+      colors.magenta('gulp-watch'),
+      colors.cyan(vinyl.path.match(/client.*/)[0]), vinyl.event + ', compiling...');
+  });
 });
 
 // Dist tasks
@@ -259,7 +269,7 @@ gulp.task('serve-dist', function () {
 });
 
 // Default task
-gulp.task('default', ['lint', 'build-all']);
+gulp.task('default', ['eslint', 'build']);
 
 // Build index
 function index() {
@@ -275,18 +285,6 @@ function index() {
     }))
     .pipe(gulp.dest('./client'))
     .pipe(livereload());
-}
-
-// Inject sass files into main sass file
-function injectSass() {
-  return g.inject(gulp.src(['./client/{app,components}/**/*.scss', '!./client/app/app.scss'], {read: false}), {
-    transform: function (filePath) { return '@import \'' + filePath + '\';'; },
-    ignorePath: '/client/app',
-    relative: true,
-    starttag: '// injector',
-    endtag: '// endinjector'
-  })
-  .pipe(gulp.dest('./client/app'));
 }
 
 // All CSS files as a stream
