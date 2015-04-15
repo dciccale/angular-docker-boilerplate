@@ -12,7 +12,7 @@ dependencies:
 test:
   override:
     - docker-compose run -d --no-deps web
-    - gulp lint
+    - gulp eslint
     - npm test
 
 deployment:
