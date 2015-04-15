@@ -255,8 +255,15 @@ gulp.task('copy-favicon', function () {
     .pipe(gulp.dest('./dist/public'));
 });
 
+// Copy needed bower components
+// i.e. font-awesome fonts
+gulp.task('copy-assets', function () {
+  return gulp.src('./client/bower_components/**/*')
+    .pipe(gulp.dest('./dist/public/bower_components'));
+});
+
 // Build dist
-gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-favicon'], function () {
+gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-assets', 'copy-favicon'], function () {
   return gulp.src('./dist/index.html')
     .pipe(g.htmlmin(htmlminOpts))
     .pipe(gulp.dest('./dist'));
