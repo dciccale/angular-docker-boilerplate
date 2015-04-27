@@ -54,7 +54,8 @@
     "lazypipe": "^0.2.2",
     "main-bower-files": "^2.6.2",
     "rimraf": "^2.3.2",
-    "streamqueue": "^0.1.3"
+    "streamqueue": "^0.1.3",
+    "wiredep": "^2.2.2"
   },
   "scripts": {
     "start": "gulp serve",

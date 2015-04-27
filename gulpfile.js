@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var g = require('gulp-load-plugins')({lazy: false});
 var noop = g.util.noop;
 var es = require('event-stream');
+var wiredep = require('wiredep').stream;
 var mainBowerFiles = require('main-bower-files');
 var rimraf = require('rimraf');
 var Queue = require('streamqueue');
@@ -140,6 +141,7 @@ gulp.task('serve', ['clean', 'build'], function () {
         colors.cyan(evt.path.match(/server.*/)[0]),
         'was', evt.type + ', restarting server...'
       );
+      setTimeout(g.livereload.reload, 1000);
     });
 
   skipIndex = false;
@@ -282,9 +284,8 @@ gulp.task('default', ['eslint', 'build']);
 function index() {
   var opt = {read: false};
   return gulp.src('./client/index.html')
-    .pipe(g.inject(gulp.src(mainBowerFiles(), opt), {
-      starttag: '<!-- inject:vendor:{{ext}} -->',
-      relative: true
+    .pipe(wiredep({
+      exclude: [/font-awesome.css/, /open-sans.css/, /feather.css/]
     }))
     .pipe(g.inject(es.merge(appFiles(opt), cssFiles(opt)), {
       ignorePath: ['../.tmp'],
