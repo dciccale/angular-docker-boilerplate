@@ -22,7 +22,7 @@ module.exports = function(app) {
   if (env === 'production') {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
-    app.set('appPath', path.join(config.root, '/public'));
+    app.set('appPath', path.join(config.root, 'public'));
     app.use(morgan('dev'));
   }
 

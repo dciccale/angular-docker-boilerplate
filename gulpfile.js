@@ -266,9 +266,9 @@ gulp.task('copy-assets', function () {
 
 // Build dist
 gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-assets', 'copy-favicon'], function () {
-  return gulp.src('./dist/index.html')
+  return gulp.src('./dist/public/index.html')
     .pipe(g.htmlmin(htmlminOpts))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/public'));
 });
 
 // Serve dist directory with gzip/deflateRun dist
