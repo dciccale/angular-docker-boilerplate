@@ -1,6 +1,6 @@
 angular.module('angular-docker-boilerplate')
-  .service('AuthService', ['$location', '$rootScope', '$http', 'User', '$cookieStore', '$q',
-    function ($location, $rootScope, $http, User, $cookieStore, $q) {
+  .service('AuthService', ['$http', 'User', '$cookieStore', '$q',
+    function ($http, User, $cookieStore, $q) {
     'use strict';
 
     var currentUser = {};
@@ -8,31 +8,26 @@ angular.module('angular-docker-boilerplate')
       currentUser = User.get();
     }
 
-
     /**
      * Authenticate user and save token
      */
     this.login = function (user, callback) {
       var cb = callback || angular.noop;
-      var deferred = $q.defer();
 
-      $http.post('/api/login', {
+      return $http.post('/api/login', {
         email: user.email,
         password: user.password
       })
-      .success(function(data) {
-        $cookieStore.put('token', data.token);
+      .then(function (res) {
+        $cookieStore.put('token', res.data.token);
         currentUser = User.get();
-        deferred.resolve(data);
-        return cb();
-      })
-      .error(function(err) {
+        cb();
+        return res.data;
+      }, function (err) {
         this.logout();
-        deferred.reject(err);
-        return cb(err);
+        cb(err.data);
+        return $q.reject(err.data);
       }.bind(this));
-
-      return deferred.promise;
     };
 
     /**
@@ -46,16 +41,16 @@ angular.module('angular-docker-boilerplate')
     /**
      * Create a new user
      */
-    this.createUser = function(user, callback) {
+    this.createUser = function (user, callback) {
       var cb = callback || angular.noop;
 
       return User.save(user,
-        function(data) {
+        function (data) {
           $cookieStore.put('token', data.token);
           currentUser = User.get();
           return cb(user);
         },
-        function(err) {
+        function (err) {
           this.logout();
           return cb(err);
         }.bind(this)).$promise;
@@ -75,9 +70,9 @@ angular.module('angular-docker-boilerplate')
       return User.changePassword({id: currentUser._id}, {
         oldPassword: oldPassword,
         newPassword: newPassword
-      }, function(user) {
+      }, function (user) {
         return cb(user);
-      }, function(err) {
+      }, function (err) {
         return cb(err);
       }).$promise;
     };
@@ -103,11 +98,11 @@ angular.module('angular-docker-boilerplate')
       if (currentUser.hasOwnProperty('$promise')) {
         currentUser.$promise
           .then(function () {
-          cb(true);
-        })
-        .catch(function () {
-          cb(false);
-        });
+            cb(true);
+          })
+          .catch(function () {
+            cb(false);
+          });
       } else if (currentUser.hasOwnProperty('role')) {
         cb(true);
       } else {

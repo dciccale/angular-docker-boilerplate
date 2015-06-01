@@ -1,6 +1,6 @@
 angular.module('angular-docker-boilerplate')
-  .controller('SignupCtrl', ['$scope', 'AuthService', '$location',
-    function ($scope, AuthService, $location) {
+  .controller('SignupCtrl', ['$scope', 'AuthService', '$state',
+    function ($scope, AuthService, $state) {
     'use strict';
 
     $scope.user = {};
@@ -15,11 +15,11 @@ angular.module('angular-docker-boilerplate')
           email: $scope.user.email,
           password: $scope.user.password
         })
-        .then( function() {
+        .then(function () {
           // Account created, redirect to home
-          $location.path('/');
+          $state.go('home');
         })
-        .catch( function(err) {
+        .catch(function (err) {
           err = err.data;
           $scope.errors = {};
 

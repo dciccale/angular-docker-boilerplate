@@ -28,10 +28,10 @@ angular.module('angular-docker-boilerplate', [
       },
 
       // Intercept 401s and redirect you to login
-      responseError: function(response) {
+      responseError: function (response) {
         if (response.status === 401) {
-          $location.path('/login');
-          // remove any stale tokens
+          $location.go('/login');
+          // Remove any stale tokens
           $cookieStore.remove('token');
           return $q.reject(response);
         }
@@ -41,18 +41,23 @@ angular.module('angular-docker-boilerplate', [
       }
     };
   }])
-  .run(['$rootScope', '$state', '$stateParams', '$location', 'AuthService',
-    function ($rootScope, $state, $stateParams, $location, AuthService) {
+  .run(['$rootScope', '$state', '$stateParams', 'AuthService',
+    function ($rootScope, $state, $stateParams, AuthService) {
     'use strict';
 
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 
     $rootScope.$on('$stateChangeStart', function (event, toState) {
-      AuthService.isLoggedInAsync(function (isLoggedIn) {
-        if (toState.authenticate && !isLoggedIn) {
-          $location.path('/login');
-        }
-      });
+      if (toState.authenticate && !AuthService.isLoggedIn()) {
+        event.preventDefault();
+        AuthService.isLoggedInAsync(function (isLoggedIn) {
+          if (isLoggedIn) {
+            $state.go(toState.name, toState.params);
+          } else {
+            $state.go('login');
+          }
+        });
+      }
     });
   }]);

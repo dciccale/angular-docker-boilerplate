@@ -88,8 +88,6 @@ See deployed node at http://web-1.angular-docker-boilerplate.dciccale.cont.tutum
 
 [![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.png)](https://dashboard.tutum.co/stack/deploy/)
 
-Go to [#tutum-buttons](https://tutum-community.slack.com/archives/tutum-buttons)
-
 ## Next
 
 - For now it only provides a production ready docker image, I want to provide a development enviroment also.

@@ -14,6 +14,7 @@ var isWatching = false;
 var path = require('path');
 var karma = require('karma').server;
 var colors = g.util.colors;
+var open = require('open');
 
 var htmlminOpts = {
   removeComments: true,
@@ -128,7 +129,9 @@ gulp.task('serve', ['clean', 'build'], function () {
   server = g.liveServer(['./server/app.js'], {}, false);
 
   // Start server
-  server.start();
+  server.start().then(function () {
+    open('http://localhost:9000');
+  });
 
   // Start livereload server
   g.livereload.listen();
@@ -198,22 +201,15 @@ gulp.task('serve', ['clean', 'build'], function () {
 // Dist tasks
 // ----------
 
-// Compress images
-gulp.task('imagemin', function () {
-  return gulp.src('./client/assets/images/{,*//*}*.{png,jpg,gif,svg}')
-    .pipe(g.imagemin())
-    .pipe(gulp.dest('./dist/assets'));
-});
-
 // Inject styles and scripts
 gulp.task('inject-dist', ['vendors', 'styles-dist', 'scripts-dist'], function () {
   return gulp.src('./client/index.html')
+    .pipe(g.inject(gulp.src('./.tmp/app.min.{js,css}'), {
+      ignorePath: '.tmp'
+    }))
     .pipe(g.inject(gulp.src('./.tmp/vendor.min.{js,css}'), {
       ignorePath: '.tmp',
       starttag: '<!-- inject:vendor:{{ext}} -->'
-    }))
-    .pipe(g.inject(gulp.src('./.tmp/app.min.{js,css}'), {
-      ignorePath: '.tmp'
     }))
     .pipe(gulp.dest('./dist/public'));
 });
@@ -232,7 +228,7 @@ gulp.task('styles-dist', ['styles'], function () {
 
 // Run dist tasks for scripts
 gulp.task('scripts-dist', ['templates-dist'], function () {
-  return appFiles().pipe(dist('js', 'app', {ngAnnotate: false}));
+  return appFiles().pipe(dist('js', 'app', {ngAnnotate: true}));
 });
 
 // Compile and minify templates
@@ -265,6 +261,14 @@ gulp.task('copy-assets', function () {
 });
 
 // Build dist
+
+// Compress images
+gulp.task('imagemin', function () {
+  return gulp.src('./client/assets/images/{,*//*}*.{png,jpg,gif,svg}')
+    .pipe(g.imagemin())
+    .pipe(gulp.dest('./dist/public/assets/images'));
+});
+
 gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-assets', 'copy-favicon'], function () {
   return gulp.src('./dist/public/index.html')
     .pipe(g.htmlmin(htmlminOpts))

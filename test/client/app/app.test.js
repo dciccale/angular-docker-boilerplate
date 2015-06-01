@@ -1,32 +1,26 @@
 describe('app', function () {
   'use strict';
 
-  var $state, $location, $httpBackend;
+  var $rootScope, $state;
 
   beforeEach(module('angular-docker-boilerplate'));
+  beforeEach(module('app/account/login/login.html'));
 
-  beforeEach(inject(function (_$state_, _$location_, _$httpBackend_) {
+  beforeEach(inject(function (_$rootScope_, _$state_) {
+    $rootScope = _$rootScope_;
     $state = _$state_;
-    $location = _$location_;
-
-    $httpBackend = _$httpBackend_;
-    $httpBackend.when('GET', 'app/main/main.html').respond({});
   }));
-
-  afterEach(function () {
-    $httpBackend.verifyNoOutstandingRequest();
-    $httpBackend.verifyNoOutstandingExpectation();
-  });
 
   describe('app tests', function () {
 
     it('should create an angular module', function () {
-      expect(angular.module('angular-docker-boilerplate')).toBeDefined();
+      expect(angular.module('angular-docker-boilerplate')).to.exist;
     });
 
-    it('should listen for $stateChangeStart and handle public routes', function () {
-      $state.go('home');
-      expect($location.path()).toEqual('/');
+    it('should listen for $stateChangeStart and redirect to login if private route', function () {
+      $state.go('settings');
+      $rootScope.$digest();
+      expect($state.current.name).to.equal('login');
     });
   });
 });

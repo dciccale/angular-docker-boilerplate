@@ -1,6 +1,6 @@
 angular.module('angular-docker-boilerplate')
-  .controller('NavbarCtrl', ['$scope', '$location', 'AuthService',
-    function ($scope, $location, AuthService) {
+  .controller('NavbarCtrl', ['$scope', '$state', 'AuthService',
+    function ($scope, $state, AuthService) {
     'use strict';
 
     $scope.isCollapsed = true;
@@ -8,12 +8,8 @@ angular.module('angular-docker-boilerplate')
     $scope.isAdmin = AuthService.isAdmin;
     $scope.getCurrentUser = AuthService.getCurrentUser;
 
-    $scope.logout = function() {
+    $scope.logout = function () {
       AuthService.logout();
-      $location.path('/login');
-    };
-
-    $scope.isActive = function(route) {
-      return route === $location.path();
+      $state.go('login');
     };
   }]);

@@ -6,7 +6,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['mocha', 'chai'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -38,7 +38,7 @@ module.exports = function (config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'client/{app,components}/**/*.js': ['coverage'],
-      '**/*.html': ['ng-html2js']
+      'client/{app,components}/**/*.html': ['ng-html2js']
     },
 
     ngHtml2JsPreprocessor: {

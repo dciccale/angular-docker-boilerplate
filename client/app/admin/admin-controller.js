@@ -1,6 +1,5 @@
 angular.module('angular-docker-boilerplate')
-  .controller('AdminCtrl', ['$scope', '$http', 'User', '$window',
-  function ($scope, $http, User, $window) {
+  .controller('AdminCtrl', ['$scope', 'User', '$window', function ($scope, User, $window) {
   'use strict';
 
     // Use the User $resource to fetch all users
