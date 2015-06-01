@@ -9,9 +9,11 @@ RUN \
 WORKDIR /home/app
 ADD . /home/app
 
+RUN npm update -g npm
 RUN \
     make install && \
     npm rebuild node-sass && \
+    npm install gulp-imagemin && \
     make build
 
 EXPOSE 8080
