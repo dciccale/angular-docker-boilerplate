@@ -18,6 +18,7 @@ module.exports = function(app) {
 
   app.use(compression());
   app.use(methodOverride());
+  app.use(require('connect-history-api-fallback')());
 
   if (env === 'production') {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
