@@ -1,3 +1,4 @@
+/*eslint no-unused-expressions:0*/
 describe('app', function () {
   'use strict';
 
