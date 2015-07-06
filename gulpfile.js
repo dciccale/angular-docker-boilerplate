@@ -155,21 +155,19 @@ gulp.task('serve', ['clean', 'build'], function () {
   });
 
   // Lint all js files
-  gulp.watch(['./client/{app,components}/**/*.js', './test/unit/**/*.js'], ['eslint']);
+  gulp.watch(['./client/{app,components}/**/*.js', './test/**/*.js'], ['eslint']);
 
-  // Watch scripts
-  g.watch(['./client/{app,components}/**/*.js', './test/unit/**/*.js'], function (vinyl) {
+  // Watch scripts to reload the browser
+  g.watch(['./client/{app,components}/**/*.js'], function (vinyl) {
     if (vinyl.event !== 'change') {
       skipIndex = true;
       gulp.start('index', function () {
-        // server.notify(vinyl);
         g.livereload.changed(vinyl);
         skipIndex = false;
       });
     } else {
       g.livereload.changed(vinyl);
       skipIndex = false;
-      // server.notify(vinyl);
     }
   });
 
@@ -236,11 +234,6 @@ gulp.task('templates-dist', function () {
   return templateFiles({min: true}).pipe(buildTemplates());
 });
 
-// Clean tmp
-gulp.task('clean-dist', function (done) {
-  rimraf('./dist/*', done);
-});
-
 // Copy server to dist
 gulp.task('copy-server', function () {
   return gulp.src('./server/**/*')
@@ -260,8 +253,6 @@ gulp.task('copy-assets', function () {
     .pipe(gulp.dest('./dist/public/bower_components'));
 });
 
-// Build dist
-
 // Compress images
 gulp.task('imagemin', function () {
   return gulp.src('./client/assets/images/{,*//*}*.{png,jpg,gif,svg}')
@@ -269,13 +260,24 @@ gulp.task('imagemin', function () {
     .pipe(gulp.dest('./dist/public/assets/images'));
 });
 
-gulp.task('dist', ['imagemin', 'rev', 'copy-server', 'copy-assets', 'copy-favicon'], function () {
+// Clean dist
+gulp.task('clean-dist', function (done) {
+  rimraf('./dist/', done);
+});
+
+// Build all files
+gulp.task('build-all', ['imagemin', 'rev', 'copy-server', 'copy-assets', 'copy-favicon'], function () {
   return gulp.src('./dist/public/index.html')
     .pipe(g.htmlmin(htmlminOpts))
     .pipe(gulp.dest('./dist/public'));
 });
 
-// Serve dist directory with gzip/deflateRun dist
+// Build dist
+gulp.task('dist', ['clean-dist'], function () {
+  return gulp.start(['build-all']);
+});
+
+// Serve dist directory in production mode
 gulp.task('serve-dist', function () {
   process.env.NODE_ENV = 'production';
   g.liveServer(['./dist/server/app.js'], {}, false).start();
@@ -367,7 +369,7 @@ function livereload() {
 }
 
 function lint() {
-  return gulp.src(['./gulpfile.js', './client/{app,components}/**/*.js', './test/unit/**/*.js'])
+  return gulp.src(['./gulpfile.js', './client/{app,components}/**/*.js', './test/**/*.js'])
     .pipe(g.cached('eslint'))
     .pipe(g.eslint());
 }
