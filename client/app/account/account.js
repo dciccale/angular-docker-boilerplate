@@ -13,6 +13,11 @@ angular.module('angular-docker-boilerplate')
         templateUrl: 'app/account/signup/signup.html',
         controller: 'SignupCtrl'
       })
+      .state('forgot', {
+        url: '/forgot',
+        templateUrl: 'app/account/forgot/forgot.html',
+        controller: 'ForgotCtrl'
+      })
       .state('settings', {
         url: '/settings',
         templateUrl: 'app/account/settings/settings.html',

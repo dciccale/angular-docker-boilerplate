@@ -1,0 +1,28 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Recover</h1>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="forgot(form)" novalidate>
+
+        <div class="form-group" ng-class="{'has-success': form.email.$valid && submitted,
+                                            'has-error': form.email.$invalid && submitted}">
+          <input id="email" type="email" name="email" class="form-control" ng-model="user.email"
+          required placeholder="Email" autofocus>
+        </div>
+
+        <div class="form-group has-error">
+          <p class="help-block" ng-show="form.email.$error.required && submitted || form.email.$error.email && submitted">
+            Please enter a valid email.
+          </p>
+        </div>
+
+        <button class="btn btn-inverse btn-lg btn-primary" type="submit">Send</button>
+        <a class="btn btn-default btn-lg" ui-sref="login">Login</a>
+      </form>
+    </div>
+  </div>
+</div>
