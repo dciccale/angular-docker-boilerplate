@@ -11,6 +11,7 @@
                                             'has-error': form.name.$invalid && submitted}">
           <label for="name">Name</label>
           <input id="name" type="text" name="name" class="form-control" ng-model="user.name"
+            autofocus
             required>
 
           <p class="help-block" ng-show="form.name.$error.required && submitted">
