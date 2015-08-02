@@ -1,4 +1,4 @@
-# Angular Docker Boilerplate [![Circle CI](https://circleci.com/gh/dciccale/angular-docker-boilerplate.svg?style=svg)](https://circleci.com/gh/dciccale/angular-docker-boilerplate) [![Coverage Status](https://coveralls.io/repos/dciccale/angular-docker-boiplerplate/badge.svg?branch=master&service=github)](https://coveralls.io/github/dciccale/angular-docker-boiplerplate?branch=master)
+# Angular Docker Boilerplate [![Circle CI](https://circleci.com/gh/dciccale/angular-docker-boilerplate.svg?style=svg)](https://circleci.com/gh/dciccale/angular-docker-boilerplate) [![Coverage Status](https://coveralls.io/repos/dciccale/angular-docker-boilerplate/badge.svg?branch=master&service=github)](https://coveralls.io/github/dciccale/angular-docker-boilerplate?branch=master)
 
 See deployed demo at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io)
 
@@ -55,7 +55,7 @@ $ make run
 
 ## API
 
-The api is on it's own repository https://github.com/dciccale/angular-docker-boiplerplate and is linked to
+The api is on it's own repository https://github.com/dciccale/angular-docker-boilerplate and is linked to
 this container.
 
 ## Docker
