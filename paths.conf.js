@@ -1,5 +1,4 @@
 module.exports = function () {
-
   var mainBowerFiles = require('main-bower-files');
   var bowerFiles = mainBowerFiles({filter: /\.js$/});
 
@@ -92,8 +91,8 @@ module.exports = function () {
     }
   };
 
-  paths.karma.preprocessors[client + appComponents + '**/*.js'] = ['coverage'];
-  paths.karma.preprocessors[client + appComponents + '**/*.html'] = ['ng-html2js'];
+  paths.karma.preprocessors[paths.client.scripts] = ['coverage'];
+  paths.karma.preprocessors[paths.client.views] = ['ng-html2js'];
 
   return paths;
 };
