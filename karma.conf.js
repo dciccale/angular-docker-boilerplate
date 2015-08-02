@@ -1,4 +1,6 @@
 module.exports = function (config) {
+  var paths = require('./paths.conf')();
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -6,44 +8,19 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'sinon'],
 
     // list of files / patterns to load in the browser
-    files: [
-      'client/bower_components/jquery/dist/jquery.js',
-      'client/bower_components/angular/angular.js',
-      'client/bower_components/angular-mocks/angular-mocks.js',
-      'client/bower_components/angular-cookies/angular-cookies.js',
-      'client/bower_components/angular-resource/angular-resource.js',
-      'client/bower_components/angular-route/angular-route.js',
-      'client/bower_components/angular-ui-router/release/angular-ui-router.js',
-
-      'client/bower_components/numeral/numeral.js',
-      'client/bower_components/angular-animate/angular-animate.js',
-      'client/bower_components/angular-bootstrap/ui-bootstrap.js',
-      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-
-      'client/app/app.js',
-      'client/app/**/*.js',
-      'client/components/**/*.js',
-      'client/app/**/*.html',
-      'client/components/**/*.html',
-      'test/client/**/*.js'
-    ],
+    files: paths.karma.files,
 
     // list of files to exclude
-    exclude: [],
+    exclude: paths.karma.exclude,
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'client/{app,components}/**/*.js': ['coverage'],
-      'client/{app,components}/**/*.html': ['ng-html2js']
-    },
+    preprocessors: paths.karma.preprocessors,
 
-    ngHtml2JsPreprocessor: {
-      stripPrefix: 'client/'
-    },
+    ngHtml2JsPreprocessor: paths.karma.ngHtml2JsPreprocessor,
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -51,10 +28,8 @@ module.exports = function (config) {
     reporters: ['progress', 'coverage'],
 
     coverageReporter: {
-      reporters: [
-        {type: 'html', dir: 'coverage/client'},
-        {type: 'cobertura', dir: 'coverage/client', file: 'test-coverage.xml'}
-      ]
+      dir: paths.karma.coverage.dir,
+      reporters: paths.karma.coverage.reporters
     },
 
     // web server port

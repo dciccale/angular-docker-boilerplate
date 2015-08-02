@@ -1,7 +1,13 @@
-angular.module('angular-docker-boilerplate')
-  .config(['$stateProvider', function ($stateProvider) {
-    'use strict';
+(function () {
+  'use strict';
 
+  angular
+    .module('angular-docker-boilerplate')
+    .config(config);
+
+  config.$inject = ['$stateProvider'];
+
+  function config($stateProvider) {
     $stateProvider
       .state('login', {
         url: '/login',
@@ -24,4 +30,5 @@ angular.module('angular-docker-boilerplate')
         controller: 'SettingsCtrl',
         authenticate: true
       });
-  }]);
+  }
+}());

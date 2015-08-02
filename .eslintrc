@@ -1,25 +1,16 @@
 {
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "mocha": true
   },
 
   "globals": {
     "angular": false,
     "$": false,
-
-    // jasmine specific
-    "jasmine": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "describe": false,
-    "expect": false,
     "inject": false,
-    "it": false,
-    "module": false,
-    "xdescribe": fale,
-    "xit": false,
-    "spyOn": false
+    "expect": false,
+    "sinon": false
   },
 
   "rules": {

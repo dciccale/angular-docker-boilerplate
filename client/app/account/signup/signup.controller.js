@@ -1,12 +1,19 @@
-angular.module('angular-docker-boilerplate')
-  .controller('SignupCtrl', ['$scope', 'AuthService', '$state',
-    function ($scope, AuthService, $state) {
-    'use strict';
+(function () {
+  'use strict';
 
+  angular
+    .module('angular-docker-boilerplate')
+    .controller('SignupCtrl', SignupCtrl);
+
+  SignupCtrl.$inject = ['$scope', 'AuthService', '$state'];
+
+  function SignupCtrl($scope, AuthService, $state) {
+    $scope.submitted = false;
     $scope.user = {};
     $scope.errors = {};
+    $scope.register = register;
 
-    $scope.register = function (form) {
+    function register(form) {
       $scope.submitted = true;
 
       if (form.$valid) {
@@ -30,5 +37,6 @@ angular.module('angular-docker-boilerplate')
           });
         });
       }
-    };
-  }]);
+    }
+  }
+}());

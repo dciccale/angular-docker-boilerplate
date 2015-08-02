@@ -9,8 +9,8 @@ body {
   color: darkslategray;
 }
 
-// injector
+// inject:scss
 @import 'admin/admin.scss';
 @import 'main/main.scss';
 @import 'account/login/login.scss';
-// endinjector
+// endinject

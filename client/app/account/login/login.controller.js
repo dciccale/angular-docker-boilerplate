@@ -1,16 +1,23 @@
-angular.module('angular-docker-boilerplate')
-  .controller('LoginCtrl', ['$scope', 'AuthService', '$state',
-    function ($scope, AuthService, $state) {
-    'use strict';
+(function () {
+  'use strict';
 
+  angular
+    .module('angular-docker-boilerplate')
+    .controller('LoginCtrl', LoginCtrl);
+
+  LoginCtrl.$inject = ['$scope', 'AuthService', '$state'];
+
+  function LoginCtrl($scope, AuthService, $state) {
+    $scope.submitted = false;
     $scope.user = {};
     $scope.errors = {};
+    $scope.login = login;
 
-    $scope.login = function (form) {
+    function login(form) {
       $scope.submitted = true;
 
       if (form.$valid) {
-        AuthService.login({
+        return AuthService.login({
           email: $scope.user.email,
           password: $scope.user.password
         })
@@ -22,5 +29,6 @@ angular.module('angular-docker-boilerplate')
           $scope.errors.other = err.message;
         });
       }
-    };
-  }]);
+    }
+  }
+}());

@@ -12,13 +12,9 @@ describe('app', function () {
     $state = _$state_;
   }));
 
-  describe('app tests', function () {
-
-    it('should create an angular module', function () {
-      expect(angular.module('angular-docker-boilerplate')).to.exist;
-    });
-
+  describe('run', function () {
     it('should listen for $stateChangeStart and redirect to login if private route', function () {
+      expect($state.current.name).to.equal('');
       $state.go('settings');
       $rootScope.$digest();
       expect($state.current.name).to.equal('login');
