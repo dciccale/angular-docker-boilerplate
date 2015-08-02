@@ -82,7 +82,8 @@ module.exports = function () {
         dir: coverage + client,
         reporters: [
           {type: 'html'},
-          {type: 'cobertura', file: 'test-coverage.xml'}
+          {type: 'cobertura', file: 'test-coverage.xml'},
+          {type: 'lcovonly', subdir: '.', file: 'lcov.info'}
         ]
       },
       ngHtml2JsPreprocessor: {

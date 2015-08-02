@@ -21,6 +21,7 @@
     "chai": "^2.2.0",
     "connect-history-api-fallback": "^1.1.0",
     "connect-livereload": "^0.5.3",
+    "coveralls": "^2.11.3",
     "csslint": "^0.10.0",
     "eslint": "^0.17.1",
     "event-stream": "^3.3.1",
@@ -68,7 +69,8 @@
   },
   "scripts": {
     "start": "gulp serve",
-    "test": "gulp test"
+    "test": "gulp test",
+    "coveralls": "gulp test-client && cat ./coverage/client/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "private": true
 }

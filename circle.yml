@@ -16,6 +16,9 @@ test:
     - docker-compose run -d --no-deps web
     - gulp eslint
     - npm test
+  post:
+    - cp -r ./coverage $CIRCLE_ARTIFACTS
+    - npm run coveralls
 
 deployment:
   hub:
