@@ -121,14 +121,12 @@ gulp.task('templates', function () {
 // Vendors
 gulp.task('vendors-js', function () {
   var js = mainBowerFiles({filter: /\.js$/});
-  return gulp.src(js)
-    .pipe(dist('js', 'vendor'));
+  return gulp.src(js).pipe(dist('js', 'vendor'));
 });
 
 gulp.task('vendors-css', function () {
   var css = mainBowerFiles({filter: ['*.css', '!font-awesome.css']});
-  return gulp.src(css)
-    .pipe(dist('css', 'vendor'));
+  return gulp.src(css).pipe(dist('css', 'vendor'));
 });
 
 gulp.task('vendors', ['vendors-js', 'vendors-css']);
@@ -244,14 +242,14 @@ gulp.task('rev', ['inject-dist'], function () {
     .pipe(gulp.dest(paths.dist.public));
 });
 
-// Run dist tasks for styles
-gulp.task('styles-dist', ['styles'], function () {
-  return cssFiles().pipe(dist('css', 'app'));
-});
-
 // Run dist tasks for scripts
 gulp.task('scripts-dist', ['templates-dist'], function () {
   return appFiles().pipe(dist('js', 'app', {ngAnnotate: true}));
+});
+
+// Run dist tasks for styles
+gulp.task('styles-dist', ['styles'], function () {
+  return cssFiles().pipe(dist('css', 'app'));
 });
 
 // Compile and minify templates
