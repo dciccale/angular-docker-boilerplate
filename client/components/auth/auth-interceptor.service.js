@@ -5,9 +5,9 @@
     .module('angular-docker-boilerplate')
     .factory('authInterceptor', authInterceptor);
 
-  authInterceptor.$inject = ['$rootScope', '$q', '$cookieStore', '$location'];
+  authInterceptor.$inject = ['$rootScope', '$q', '$cookies', '$location'];
 
-  function authInterceptor($rootScope, $q, $cookieStore, $location) {
+  function authInterceptor($rootScope, $q, $cookies, $location) {
     var service = {
       request: request,
       responseError: responseError
@@ -18,8 +18,8 @@
     // Add authorization token to headers
     function request(config) {
       config.headers = config.headers || {};
-      if ($cookieStore.get('token')) {
-        config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+      if ($cookies.get('token')) {
+        config.headers.Authorization = 'Bearer ' + $cookies.get('token');
       }
       return config;
     }
@@ -29,7 +29,7 @@
       if (response.status === 401) {
         $location.path('/login');
         // Remove any stale tokens
-        $cookieStore.remove('token');
+        $cookies.remove('token');
         return $q.reject(response);
       }
       else {

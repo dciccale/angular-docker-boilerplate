@@ -2,7 +2,7 @@
 describe('auth', function () {
   'use strict';
 
-  var AuthService, $cookieStore, $httpBackend;
+  var AuthService, $cookies, $httpBackend;
 
   var mock = {
     token: '1234',
@@ -29,18 +29,22 @@ describe('auth', function () {
   beforeEach(module('app/main/main.html'));
 
   function decorate($provide) {
-    $provide.decorator('$cookieStore', function ($delegate) {
+    $provide.decorator('$cookies', function ($delegate) {
       $delegate.put('token', mock.token);
       return $delegate;
     });
   }
 
-  beforeEach(inject(function (_AuthService_, _$cookieStore_, _$httpBackend_) {
+  beforeEach(inject(function (_AuthService_, _$cookies_, _$httpBackend_) {
     AuthService = _AuthService_;
-    $cookieStore = _$cookieStore_;
+    $cookies = _$cookies_;
     $httpBackend = _$httpBackend_;
-    $cookieStore.put('token', mock.token);
+    $cookies.put('token', mock.token);
   }));
+
+  afterEach(function () {
+    $cookies.remove('token');
+  });
 
   describe('login()', function () {
     it('should login a user', function () {

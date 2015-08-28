@@ -2,7 +2,7 @@
 describe('authInterceptor', function () {
   'use strict';
 
-  var authInterceptor, $location, $cookieStore;
+  var authInterceptor, $location, $cookies;
 
   var fakeCookie = {
     token: '1234'
@@ -11,11 +11,11 @@ describe('authInterceptor', function () {
   beforeEach(module('angular-docker-boilerplate'));
   beforeEach(module('app/main/main.html'));
 
-  beforeEach(inject(function (_authInterceptor_, _$location_, _$cookieStore_) {
+  beforeEach(inject(function (_authInterceptor_, _$location_, _$cookies_) {
     authInterceptor = _authInterceptor_;
     $location = _$location_;
-    $cookieStore = _$cookieStore_;
-    $cookieStore.put('token', fakeCookie.token);
+    $cookies = _$cookies_;
+    $cookies.put('token', fakeCookie.token);
   }));
 
   describe('authInterceptor', function () {
@@ -38,7 +38,7 @@ describe('authInterceptor', function () {
       });
 
       it('should not include Authorization header if token is not present', function () {
-        $cookieStore.remove('token');
+        $cookies.remove('token');
         var o = {};
         var config = authInterceptor.request(o);
         expect(config).to.equal(o);
@@ -53,9 +53,9 @@ describe('authInterceptor', function () {
       });
 
       it('should handle 401 unauthorized request and remove token cookie', function () {
-        expect($cookieStore.get('token')).to.equal(fakeCookie.token);
+        expect($cookies.get('token')).to.equal(fakeCookie.token);
         authInterceptor.responseError({status: 401});
-        expect($cookieStore.get('token')).to.equal(undefined);
+        expect($cookies.get('token')).to.equal(undefined);
       });
 
       it('should reject all other errors', function () {

@@ -5,12 +5,12 @@
     .module('angular-docker-boilerplate')
     .factory('AuthService', AuthService);
 
-  AuthService.$inject = ['$http', 'User', '$cookieStore', '$q'];
+  AuthService.$inject = ['$http', 'User', '$cookies', '$q'];
 
-  function AuthService($http, User, $cookieStore, $q) {
+  function AuthService($http, User, $cookies, $q) {
     var currentUser = {};
 
-    if ($cookieStore.get('token')) {
+    if ($cookies.get('token')) {
       currentUser = User.get();
     }
 
@@ -39,7 +39,7 @@
         password: user.password
       })
       .then(function (res) {
-        $cookieStore.put('token', res.data.token);
+        $cookies.put('token', res.data.token);
         currentUser = User.get();
         cb();
         return res.data;
@@ -54,7 +54,7 @@
      * Delete access token and user info
      */
     function logout() {
-      $cookieStore.remove('token');
+      $cookies.remove('token');
       currentUser = {};
     }
 
@@ -66,7 +66,7 @@
 
       return User.save(user,
         function (data) {
-          $cookieStore.put('token', data.token);
+          $cookies.put('token', data.token);
           currentUser = User.get();
           return cb(user);
         },
@@ -141,7 +141,7 @@
      * Get auth token
      */
     function getToken() {
-      return $cookieStore.get('token');
+      return $cookies.get('token');
     }
   }
 }());
