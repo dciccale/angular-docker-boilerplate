@@ -20,7 +20,6 @@
     "browser-sync": "^2.8.2",
     "chai": "^2.2.0",
     "connect-history-api-fallback": "^1.1.0",
-    "connect-livereload": "^0.5.3",
     "coveralls": "^2.11.3",
     "csslint": "^0.10.0",
     "eslint": "^0.17.1",
@@ -64,8 +63,7 @@
     "phantomjs-polyfill": "0.0.1",
     "rimraf": "^2.3.2",
     "sinon": "^1.15.4",
-    "supertest": "^1.0.1",
-    "wiredep": "^3.0.0-beta"
+    "supertest": "^1.0.1"
   },
   "scripts": {
     "start": "gulp serve",

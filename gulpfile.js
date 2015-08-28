@@ -4,7 +4,6 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({lazy: false});
 var noop = $.util.noop;
 var es = require('event-stream');
-var wiredep = require('wiredep').stream;
 var mainBowerFiles = require('main-bower-files');
 var rimraf = require('rimraf');
 var lazypipe = require('lazypipe');
@@ -101,9 +100,8 @@ gulp.task('styles', function () {
   function injectSass() {
     return $.inject(gulp.src(scssFiles, {read: false}), {
       transform: transform,
-      // ignorePath: paths.clientApp,
       relative: true,
-      starttag: '// inject:scss',
+      starttag: '// {{name}}:scss',
       endtag: '// endinject'
     });
   }
@@ -230,7 +228,7 @@ gulp.task('inject-dist', ['vendors', 'styles-dist', 'scripts-dist'], function ()
   function injectVendorFiles() {
     return $.inject(gulp.src(paths.tmp + 'vendor.min.{js,css}', opt), {
       ignorePath: paths.tmp,
-      starttag: '<!-- inject:vendor:{{ext}} -->'
+      starttag: '<!-- {{name}}:vendor:{{ext}} -->'
     });
   }
 });
@@ -320,11 +318,12 @@ gulp.task('default', ['eslint', 'build']);
 // Inject js and css into index
 function index() {
   var opt = {read: false};
+  var vendors = mainBowerFiles({filter: ['**', '!**/font-awesome.css']});
   return gulp.src(paths.client.index)
     .pipe($.cached('index'))
-    .pipe(wiredep({
-      // Imported with sass into app.scss
-      exclude: [/font-awesome.css/]
+    .pipe($.inject(gulp.src(vendors, opt), {
+      relative: true,
+      starttag: '<!-- {{name}}:vendor:{{ext}} -->',
     }))
     .pipe($.inject(es.merge(appFiles(opt), cssFiles(opt)), {
       ignorePath: ['../' + paths.tmp],
