@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   override:
-    - sudo pip install --upgrade docker-compose
+    - sudo pip install docker-compose
     - npm install -g gulp bower
     - npm install
     - bower install
