@@ -14,8 +14,6 @@ module.exports[404] = function pageNotFound(req, res) {
     status: statusCode
   };
 
-  console.log(config.root);
-
   res.status(result.status);
   res.sendFile(viewFilePath, function (err) {
     if (err) {
