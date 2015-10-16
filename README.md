@@ -1,7 +1,5 @@
 # Angular Docker Boilerplate [![Circle CI](https://circleci.com/gh/dciccale/angular-docker-boilerplate.svg?style=svg)](https://circleci.com/gh/dciccale/angular-docker-boilerplate) [![Coverage Status](https://coveralls.io/repos/dciccale/angular-docker-boilerplate/badge.svg?branch=master&service=github)](https://coveralls.io/github/dciccale/angular-docker-boilerplate?branch=master)
 
-See deployed demo at [web-1.angular-docker-boilerplate.dciccale.cont.tutum.io](http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io)
-
 ## Installation
 
 ```bash
@@ -83,8 +81,6 @@ Build url: https://circleci.com/gh/dciccale/angular-docker-boilerplate
 ## Continuous Delivery
 
 With [Tutum](https://www.tutum.co/), see [tutum.yml](tutum.yml)
-
-See deployed node at http://web-1.angular-docker-boilerplate.dciccale.cont.tutum.io
 
 [![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.png)](https://dashboard.tutum.co/stack/deploy/)
 
